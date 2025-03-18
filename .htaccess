@@ -1,0 +1,87 @@
+RewriteOptions inherit
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller (index.php)...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # CORS Settings (Allow All Origins)
+    <IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, DELETE, PUT"
+        Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    </IfModule>
+</IfModule>
+
+# Protect Sensitive Files
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files composer.json>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files composer.lock>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files package.json>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# BEGIN cPanel-generated php ini directives, do not edit manually
+<IfModule php8_module>
+    php_flag display_errors Off
+    php_value max_execution_time 3000
+    php_value max_input_time 6000
+    php_value max_input_vars 30000
+    php_value memory_limit 5120M
+    php_value post_max_size 5120M
+    php_value session.gc_maxlifetime 14400
+    php_value session.save_path "/var/cpanel/php/sessions/ea-php81"
+    php_value upload_max_filesize 5120M
+    php_flag zlib.output_compression Off
+</IfModule>
+
+<IfModule lsapi_module>
+    php_flag display_errors Off
+    php_value max_execution_time 3000
+    php_value max_input_time 6000
+    php_value max_input_vars 30000
+    php_value memory_limit 5120M
+    php_value post_max_size 5120M
+    php_value session.gc_maxlifetime 14400
+    php_value session.save_path "/var/cpanel/php/sessions/ea-php81"
+    php_value upload_max_filesize 5120M
+    php_flag zlib.output_compression Off
+</IfModule>
+# END cPanel-generated php ini directives
+
+# Set PHP version to 8.2
+<IfModule mime_module>
+    AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+</IfModule>
+
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"
